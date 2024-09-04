@@ -9,7 +9,7 @@ segundo = agrego lo que anadi como carpetas o algo con                          
 tercero = verifico si lo agrege bien con el                                                = git status 
 cuarto  = aca lo que tengo que hacer es lo ultimo que hize para facilitarlo al leyente con = git commit -m "nombre de lo que hiziste"
 quinto  = finalizo osea termine y lo subo con                                              = git push
-
+a
 Resumen de Comandos
 Para descartar cambios en un archivo específico:
 bash
