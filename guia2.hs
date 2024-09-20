@@ -1,6 +1,7 @@
 --ejercicio 1 
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Redundant bracket" #-}
+{-# HLINT ignore "Eta reduce" #-}
 fibonacci:: Integer -> Integer
 fibonacci 0 = 0
 fibonacci 1 = 1
@@ -160,6 +161,9 @@ dobleSumatoria 5 1 = 1^1 |+| 2^1 |+| 3^1 |+| 4^1 |+| 5^1                     = 1
 ss
 -}
 -- ejercicio 14
+
+
+{-
 -- preguntar si es asi el codigo o lo entendi mal 
 sumaPotencias :: Float -> Integer -> Integer -> Float
 sumaPotencias q n 0 = 0 
@@ -174,3 +178,64 @@ sumaRacionales n 0 = 0  -- ya que ahi esta el paso inductivo
 sumaRacionales n m = fromInteger (sumatoria n) / m  + sumaRacionales n (m-1)
 
 --como pasar de numeros enteros a reales es con fromIntegral
+-}
+
+--ejercicio 15A 
+menorDivisorDesde ::Integer -> Integer -> Integer
+menorDivisorDesde n m | n == m = n       
+                      | mod m n == 0 =  n 
+                      | n > m = 0 
+                      | otherwise = menorDivisorDesde (n+1) m 
+
+{-                         ------->
+menorDivisorDesde 2 7  = 7         (es primo es 1 o 7 )       
+menorDivisorDesde 2 16 = 2         (divisore 16 =|2|,4,8,16)                
+menorDivisorDesde 7 12 = 12       
+-} 
+
+menorDivisor :: Integer -> Integer
+menorDivisor n = menorDivisorDesde 2 n 
+
+--ejercicio 15B
+esPrimo :: Integer -> Bool
+esPrimo 1 = False
+esPrimo n | menorDivisor n == n = True
+          | otherwise = False
+
+--ejercicio 15C
+
+--ejercicio 15D
+nEsimoPrimo :: Integer -> Integer 
+nEsimoPrimo 1 = 2 
+nEsimoPrimo n = nEsimoPrimoDesde n n 
+
+{-
+nEsimoPrimo 1  = 2 
+nEsimoPrimo 5  = 11 
+nEsimoPrimo 10 = 29 
+-}
+
+nEsimoPrimoAux :: Integer -> Integer -> Integer 
+nEsimoPrimoAux n m | esPrimo n = 1 + nEsimoPrimoAux (n+1) m 
+                   | n == m = 0
+                   | otherwise = nEsimoPrimoAux (n+1) m  
+
+nEsimoPrimoDesde :: Integer -> Integer -> Integer 
+nEsimoPrimoDesde n m | n == m = n 
+                     | esPrimo n = n 
+                     | otherwise = nEsimoPrimoDesde (n+1) m 
+{-
+nEsimoPrimoDesde 20 30    = 23
+nEsimoPrimoDesde 25 30    = 29
+nEsimoPrimoDesde 50 100   = 53
+-}
+
+nEsimoPrimoHasta :: Integer -> Integer -> Integer 
+nEsimoPrimoHasta n m | n == m = n 
+                     | esPrimo m = m
+                     | otherwise = nEsimoPrimoHasta n (m-1)
+{-
+nEsimoPrimoHasta 2 10   = 7
+nEsimoPrimoHasta 5 10   = 7
+nEsimoPrimoHasta 12 34  = 31
+-}
