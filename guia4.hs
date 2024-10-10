@@ -2,6 +2,7 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Redundant bracket" #-}
 {-# HLINT ignore "Eta reduce" #-}
+
 fibonacci:: Integer -> Integer
 fibonacci 0 = 0
 fibonacci 1 = 1
@@ -161,26 +162,26 @@ dobleSumatoria 5 1 = 1^1 |+| 2^1 |+| 3^1 |+| 4^1 |+| 5^1                     = 1
 ss
 -}
 -- ejercicio 14
+sumaPotencias :: Integer -> Integer -> Integer -> Integer 
+sumaPotencias q n 0 = 0
+sumaPotencias q n m = f2Bis q  n * q^m + sumaPotencias q n (m-1)
 
+--aux 
+f2Bis :: Integer -> Integer -> Integer
+f2Bis q 1 = q
+f2Bis 0 n = 0
+f2Bis q n = q^n + f2Bis q (n-1)
 
-{-
--- preguntar si es asi el codigo o lo entendi mal 
-sumaPotencias :: Float -> Integer -> Integer -> Float
-sumaPotencias q n 0 = 0 
-sumaPotencias q n m = q^m * f2 q n + sumaPotencias q n (m-1)
---ejercicio 15 
-sumatoria :: Integer -> Integer 
-sumatoria 1 = 1 
-sumatoria x = x + sumatoria (x-1)
+sumatoria :: Integer -> Integer
+sumatoria 0 = 0 
+sumatoria x = x+ sumatoria (x-1)
 
-sumaRacionales :: Integer -> Float -> Float 
-sumaRacionales n 0 = 0  -- ya que ahi esta el paso inductivo 
-sumaRacionales n m = fromInteger (sumatoria n) / m  + sumaRacionales n (m-1)
+-- ejercicio 15 
+sumaRacionales :: Integer -> Integer -> Float
+sumaRacionales n 0 = 0 
+sumaRacionales n m = sumaRacionales n (m-1) + (fromInteger(sumatoria n)) / fromInteger m
 
---como pasar de numeros enteros a reales es con fromIntegral
--}
-
---ejercicio 15A 
+--ejercicio 16A 
 menorDivisorDesde ::Integer -> Integer -> Integer
 menorDivisorDesde n m | n == m = n       
                       | mod m n == 0 =  n 
@@ -192,50 +193,75 @@ menorDivisorDesde 2 7  = 7         (es primo es 1 o 7 )
 menorDivisorDesde 2 16 = 2         (divisore 16 =|2|,4,8,16)                
 menorDivisorDesde 7 12 = 12       
 -} 
-
 menorDivisor :: Integer -> Integer
 menorDivisor n = menorDivisorDesde 2 n 
-
---ejercicio 15B
+--ejercicio 16B
 esPrimo :: Integer -> Bool
 esPrimo 1 = False
 esPrimo n | menorDivisor n == n = True
           | otherwise = False
 
---ejercicio 15C
+--ejercicio 16C
+sonCoprimos :: Integer -> Integer -> Bool 
+sonCoprimos n m | n == m = False 
+                | menorDivisor n == menorDivisor m = False 
+                | otherwise = True
 
---ejercicio 15D
+--ejercicio 16D preguntar
 nEsimoPrimo :: Integer -> Integer 
 nEsimoPrimo 1 = 2 
-nEsimoPrimo n = nEsimoPrimoDesde n n 
-
+nEsimoPrimo n = nEsimoPrimoDesdeAux (1+ nEsimoPrimo (n-1))
 {-
 nEsimoPrimo 1  = 2 
 nEsimoPrimo 5  = 11 
 nEsimoPrimo 10 = 29 
 -}
+nEsimoPrimoDesdeAux :: Integer -> Integer
+nEsimoPrimoDesdeAux 2 = 2 
+nEsimoPrimoDesdeAux n | esPrimo n = n 
+                      | otherwise = nEsimoPrimoDesdeAux (n+1)
 
-nEsimoPrimoAux :: Integer -> Integer -> Integer 
-nEsimoPrimoAux n m | esPrimo n = 1 + nEsimoPrimoAux (n+1) m 
-                   | n == m = 0
-                   | otherwise = nEsimoPrimoAux (n+1) m  
+----ejercicio 17 preguntar
 
-nEsimoPrimoDesde :: Integer -> Integer -> Integer 
-nEsimoPrimoDesde n m | n == m = n 
-                     | esPrimo n = n 
-                     | otherwise = nEsimoPrimoDesde (n+1) m 
+esFibonacci :: Integer -> Bool 
+esFibonacci 1 = True 
+
+----ejercicio 19 preguntar
+
+esSumaInicialDePrimos :: Integer -> Bool 
+esSumaInicialDePrimos n = esSumaDePrimerosKPrimos 2 n 
+
 {-
-nEsimoPrimoDesde 20 30    = 23
-nEsimoPrimoDesde 25 30    = 29
-nEsimoPrimoDesde 50 100   = 53
+primos 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43,
+        47, 53, 59, 61, 67, 71, 73, 79, 83, 89 y 97
+esSumaInicialDePrimos 10 = True = 2 + 3 + 5 
+esSumaInicialDePrimos 12 = False = 2 + 3 + 5 = 10  + 7 = 17 > 12 
+esSumaInicialDePrimos
 -}
 
-nEsimoPrimoHasta :: Integer -> Integer -> Integer 
-nEsimoPrimoHasta n m | n == m = n 
-                     | esPrimo m = m
-                     | otherwise = nEsimoPrimoHasta n (m-1)
+esSumaDePrimerosKPrimos :: Integer -> Integer -> Bool
+esSumaDePrimerosKPrimos k n | (esSumaDeKPrimos k) == n = True 
+                            | (esSumaDeKPrimos k) > n = False 
+                            | otherwise = esSumaDePrimerosKPrimos (k+1) n
 {-
-nEsimoPrimoHasta 2 10   = 7
-nEsimoPrimoHasta 5 10   = 7
-nEsimoPrimoHasta 12 34  = 31
+primos 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43,
+        47, 53, 59, 61, 67, 71, 73, 79, 83, 89 y 97
+esSumaDePrimerosKPrimos 5 10 = |10| == 10 = 2 + 3 +5 = True 
+esSumaDePrimerosKPrimos 9 10 = |17| \= 10 = 2 + 3 + 5 + 7 = False 
+esSumaDePrimerosKPrimos
+-}
+esSumaDeKPrimos :: Integer -> Integer 
+esSumaDeKPrimos 2 = 2 
+esSumaDeKPrimos n = esSumaDeDesdeKPrimos 2 n 
+
+
+esSumaDeDesdeKPrimos :: Integer -> Integer -> Integer
+esSumaDeDesdeKPrimos k n | k > n = 0
+                                 | esPrimo k = k + esSumaDeDesdeKPrimos (k+1) n             
+                                 | otherwise = esSumaDeDesdeKPrimos (k+1) n
+
+{-
+esSumaDePrimerosDesdeKPrimos 2 5  = 2 3 5 = 10
+esSumaDePrimerosDesdeKPrimos 3 10 = 3 5 7 = 15
+esSumaDePrimerosDesdeKPrimos 4 23 = 7 11 13 17 19 23 = 95 
 -}
